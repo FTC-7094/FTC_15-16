@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 public class MainBotManual extends OpMode {
-    float powerScale (float initialPower)
+    float powerScale (float initialPower) //Nonlinear scaling from PushBotHardware
     {
         // Remove illegal powers.
         float legalPower = Range.clip (initialPower, -1, 1);
@@ -73,7 +73,7 @@ public class MainBotManual extends OpMode {
         else                      { spinner.   setPower( 0.0); }
         if      (gamepad2.x)      { bxServo.setPosition( 1.0); }
         else                      { bxServo.setPosition( 0.0); }
-        
+
         //Analog controlled conglomerate
         motorRL.setPower(powerRL);
         motorRR.setPower(powerRR);
