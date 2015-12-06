@@ -1,71 +1,41 @@
-/* Copyright (c) 2015 Qualcomm Technologies Inc
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list
-of conditions and the following disclaimer.
-
-Redistributions in binary form must reproduce the above copyright notice, this
-list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-
-Neither the name of Qualcomm Technologies Inc nor the names of its contributors
-may be used to endorse or promote products derived from this software without
-specific prior written permission.
-
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
-
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import android.graphics.Color;
+/**
+ * Created by "M" on 2015.12.05
+ */
 
 public class MainBotAuto extends LinearOpMode {
+    Servo   bxServo;
     DcMotor motorRR;
     DcMotor motorRL;
-    DcMotor spooleo; //Pun on Romeo, spool motor
-    Servo   bxServo; //"o"
-
-
-    ColorSensor cSensor;
-    float[] hsvOf(ColorSensor sensor) {
-        float converted[] = {};
-        Color.RGBToHSV(sensor.red() * 8, sensor.green() * 8, sensor.blue() * 8, converted);
-        return converted;
-    }
+    DcMotor spooleo;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        bxServo = hardwareMap.servo      .get("BoxServo"   );
-        motorRL = hardwareMap.dcMotor    .get("RearLeft"   );
-        motorRR = hardwareMap.dcMotor    .get("RearRight"  );
-        spooleo = hardwareMap.dcMotor    .get("RearSpool"  );
-        cSensor = hardwareMap.colorSensor.get("ColorSensor");
+        bxServo = hardwareMap.servo  .get("BoxServo");
+        motorRL = hardwareMap.dcMotor.get("RearLeft"   );
+        motorRR = hardwareMap.dcMotor.get("RearRight"  );
+        spooleo = hardwareMap.dcMotor.get("RearSpool"  );
 
-        // turn the LED on in the beginning, just so user will know that the sensor is active.
-        cSensor.enableLed(true);
+
         waitForStart();
-        hsvOf(cSensor);
-        // turn off the LED.
-        cSensor.enableLed(false);
+        //start moving straight forward
+        motorRL.setPower(0.75);
+        motorRR.setPower(0.75);
+        sleep(3000); //keep going straight
+        motorRL.setPower(0.00); //start turning right
+        sleep(500); //keep turning for half second
+        motorRR.setPower(0.75); //start going straight
+        sleep(2500); //keep going straight
+        motorRR.setPower(0.00); //stop moving
+        motorRL.setPower(0.00);
+        spooleo.setPower(0.50); //start to raise box
+        sleep(700); //keep raising box
+        spooleo.setPower(0.00); //stop raising box
+        bxServo.setPosition(1); //open box
     }
 }
 
