@@ -7,36 +7,14 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 /**
- * Created by "M" on 2015.12.05
+ * Created for yusuf on 2016.01.13
  */
 
-public class MainBotAutoBeta extends LinearOpMode {
-    DcMotor motorRR;
-    DcMotor motorRL;
-    DcMotor spooleo; //Pun on Romeo, spool motor
-    Servo   bxServo; //"o"
-
-
-    ColorSensor cSensor;
-    float[] hsvOf(ColorSensor sensor) {
-        float converted[] = {};
-        Color.RGBToHSV(sensor.red() * 8, sensor.green() * 8, sensor.blue() * 8, converted);
-        return converted;
-    }
-
-    @Override
+public class MainBotAutoBeta extends MainBotAutoBase {
     public void runOpMode() throws InterruptedException {
-        bxServo = hardwareMap.servo      .get("BoxServo"   );
-        motorRL = hardwareMap.dcMotor    .get("RearLeft"   );
-        motorRR = hardwareMap.dcMotor    .get("RearRight"  );
-        spooleo = hardwareMap.dcMotor    .get("RearSpool"  );
-        cSensor = hardwareMap.colorSensor.get("ColorSensor");
-
-        cSensor.enableLed(true);
-        waitForStart();
-        hsvOf(cSensor);
-        // turn off the LED.
-        cSensor.enableLed(false);
+        moveB( 1.0); sleep(500); spinB( 1.0); sleep( 1000); moveB( 1.0); sleep( 1000); stopB(); //get on ramp
+        highT( 0.5); sleep( 1000); highT( 0.0); longT( 1.0); sleep( 3000); stopT(    ); //attach tape
+        mensR(    ); longT(-1.0); moveB( 1.0); stopT(    ); stopB(    ); noMen(    ); //bring bot up
     }
 }
 
